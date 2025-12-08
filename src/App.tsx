@@ -1,8 +1,8 @@
 import { Route, Routes } from 'react-router-dom';
-import SimpleExample from './SimpleExample';
-import MiddleExample from './MiddleExample';
-import DifficultExample from './DifficultExample';
-import DefaultPage from './DefaultPage';
+import SimpleExample from './pages/SimpleExample';
+import MiddleExample from './pages/MiddleExample';
+import DifficultExample from './pages/DifficultExample';
+import DefaultPage from './pages/DefaultPage';
 import './App.css';
 
 function App() {

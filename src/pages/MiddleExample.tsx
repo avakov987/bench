@@ -1,5 +1,5 @@
-import Component1 from './Component1';
-import Component2 from './Component2';
+import Component1 from '../components/Component1';
+import Component2 from '../components/Component2';
 
 export default function MiddleExample() {
 	return (

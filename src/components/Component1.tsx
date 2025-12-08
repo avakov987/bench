@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import useSWR from './useSWR';
+import useSWR from '../hooks/useSWR';
 
 export default function Component1() {
 	const timestamp = useSelector((state: any) => state?.rerender?.timestamp);

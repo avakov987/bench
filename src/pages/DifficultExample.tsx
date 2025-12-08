@@ -1,9 +1,9 @@
 import { useDispatch, useSelector } from 'react-redux';
-import Component1 from './Component1';
-import Component2 from './Component2';
-import Component3 from './Component3';
-import Component4 from './Component4';
-import { rerender } from './store/store';
+import Component1 from '../components/Component1';
+import Component2 from '../components/Component2';
+import Component3 from '../components/Component3';
+import Component4 from '../components/Component4';
+import { rerender } from '../store/store';
 import { useEffect } from 'react';
 
 export default function DifficultExample() {

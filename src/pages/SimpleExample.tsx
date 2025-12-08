@@ -1,4 +1,4 @@
-import Component1 from './Component1';
+import Component1 from '../components/Component1';
 
 export default function SimpleExample() {
 	return (
