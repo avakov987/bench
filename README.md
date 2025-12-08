@@ -27,11 +27,19 @@ npm run dev
 
 # Структура проекта
 
+```
 bench/
 ├── src/
 │   ├── store/
 │   ├── hooks/
+│   │   ├── useHover.tsx
+│   │   ├── usePrevios.tsx
+│   │   ├── useSWR.tsx
 │   ├── components/
+│   │   ├── Component1.tsx
+│   │   ├── Component2.tsx
+│   │   ├── Component3.tsx
+│   │   ├── Component4.tsx
 │   ├── pages/
 │   │   ├── DefaultPage.tsx
 │   │   ├── SimpleExample.tsx
@@ -39,3 +47,4 @@ bench/
 │   │   └── MiddleExample.tsx
 │   ├── App.tsx
 │   └── main.tsx
+```
