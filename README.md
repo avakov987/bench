@@ -18,11 +18,11 @@ cd <папка-проекта>
 
 # Установите зависимости
 
-npm install
+`npm install`
 
 # Запуск dev сервера
 
-npm run dev
+`npm run dev`
 
 # Структура проекта
 
