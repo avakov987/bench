@@ -1,6 +1,8 @@
+import { useSelector } from 'react-redux';
 import useSWR from './useSWR';
 
 export default function Component1() {
+	const timestamp = useSelector((state: any) => state?.rerender?.timestamp);
 	const fetcher = async (key: string) =>
 		await fetch(`https://petstore.swagger.io/v2/pet/${key}`, {
 			method: 'GET',

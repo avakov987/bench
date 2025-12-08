@@ -11,9 +11,8 @@ export default function DifficultExample() {
 	const timestamp = useSelector(
 		(state: {}) => state?.rerender?.timestamp || Date.now()
 	);
+	console.log('ререндер');
 	useEffect(() => {
-		console.log('ререндер');
-
 		const timer = setInterval(() => {
 			dispatch(rerender());
 		}, 1000);
