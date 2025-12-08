@@ -14,7 +14,7 @@
 
 [git clone git@github.com:avakov987/bench.git](https://github.com/avakov987/bench#)
 
-cd <папка-проекта>
+`cd <папка-проекта>`
 
 # Установите зависимости
 
