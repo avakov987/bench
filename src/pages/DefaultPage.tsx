@@ -13,6 +13,9 @@ export default function DefaultPage() {
 			<div>
 				<Link to="difficult">difficult</Link>
 			</div>
+			<div>
+				<Link to="test-ws">test-ws</Link>
+			</div>
 		</div>
 	);
 }
