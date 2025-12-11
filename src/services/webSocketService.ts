@@ -32,16 +32,16 @@ class WebSocketService {
     return socket;
   }
 
-  send(key: string, message: unknown) {
+  send(key: string, message: string) {
     const connection = this.connections[key];
 
     if (!connection) {
       console.log('по ключу нет совпадений');
-      return
+
+      return;
     }
 
     if (connection.socket.readyState === WebSocket.OPEN) {
-
       connection.socket.send(message);
     }
   }
@@ -52,10 +52,7 @@ class WebSocketService {
     if (connection) {
       connection.socket.close(1000, 'disconnect');
       delete this.connections[key];
-      return true;
     }
-
-    return false;
   }
 
   getConnection(key: string): WebSocketConnection | null {

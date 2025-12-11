@@ -1,13 +1,13 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, type KeyboardEvent } from 'react';
 import useWS from '../hooks/useWS';
 import Chat from '../components/Chat';
 
 export default function TestWebSocket() {
-	const inputRef = useRef(null);
+	const inputRef = useRef<HTMLInputElement>(null);
 	const [connectionKey, setConnectionKey] = useState(
 		`connection_${Date.now()}`
 	);
-	const { isConnected, send, disconnect, messages } = useWS(
+	const { isConnected, error, send, disconnect, messages } = useWS(
 		connectionKey,
 		'wss://echo.websocket.org'
 	);
@@ -24,9 +24,8 @@ export default function TestWebSocket() {
 		inputRef.current.value = '';
 	};
 
-	const handleKeyPress = (event) => {
+	const handleKeyPress = (event: KeyboardEvent<HTMLInputElement>): void => {
 		if (event.key === 'Enter') {
-			event.preventDefault();
 			handleSend();
 		}
 	};
@@ -37,6 +36,9 @@ export default function TestWebSocket() {
 	return (
 		<div>
 			<div>Test WS</div>
+			{error && error instanceof Error && (
+				<div style={{ color: 'red' }}>{error.message ?? error}</div>
+			)}
 
 			<div
 				style={{

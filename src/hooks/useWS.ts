@@ -16,25 +16,39 @@ export default function useWS(key: string, url?: string): UseWSReturn {
   const [messages, setMessages] = useState<string[]>([]);
 
   useLayoutEffect(() => {
-    if (!url) return;
+    if (!url) {
+      setError(new Error('url is required'));
+
+      return;
+    }
 
     const socket = webSocket.connect(key, url);
 
-    socket.onopen = () => {
+    socket.onopen = (event) => {
+      if (event.cancelable) {
+        setError(new Error('Failed to open connection'))
+
+        return;
+      }
+
       setIsConnected(true);
       setError(null);
     }
 
     socket.onmessage = (event: MessageEvent) => {
-      const message = event.data.toString();
-      const isSystemMessage =
-        message.startsWith('Request') ||
-        message.includes('served by') ||
-        message.includes('WebSocket') ||
-        message.includes('connection');
+      try {
+        const message = event.data.toString();
+        const isSystemMessage =
+          message.startsWith('Request') ||
+          message.includes('served by') ||
+          message.includes('WebSocket') ||
+          message.includes('connection');
 
-      if (!isSystemMessage) {
-        setMessages(prev => [...prev, message]);
+        if (!isSystemMessage) {
+          setMessages(prev => [...prev, message]);
+        }
+      } catch (error) {
+        setError(new Error('Failed to process message'));
       }
     }
 
@@ -60,11 +74,22 @@ export default function useWS(key: string, url?: string): UseWSReturn {
   }, [key, url]);
 
   const send = (data: string | object): void => {
-    webSocket.send(key, data);
+    try {
+      const success = webSocket.send(key, data);
+      console.log({ success });
+    } catch (error) {
+      setError(error instanceof Error ? error : new Error('unknown send error'));
+    }
   }
 
   const disconnect = (): void => {
-    webSocket.disconnect(key);
+    try {
+      webSocket.disconnect(key);
+    } catch (error) {
+      console.log(error);
+
+      setError(new Error('Failed disconnected'))
+    }
   }
 
   const getAllConnections = () => webSocket.getActiveKeys()
