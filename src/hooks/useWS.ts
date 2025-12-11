@@ -1,10 +1,10 @@
-import { useLayoutEffect, useState, useCallback } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { webSocket } from '../services/webSocketService';
 
 interface UseWSReturn {
   isConnected: boolean;
   error: Error | null;
-  send: (data: string | object) => boolean;
+  send: (data: string | object) => void;
   disconnect: () => void;
   getAllConnections: () => string[];
   messages: string[];
@@ -20,12 +20,12 @@ export default function useWS(key: string, url?: string): UseWSReturn {
 
     const socket = webSocket.connect(key, url);
 
-    const handleOpen = () => {
+    socket.onopen = () => {
       setIsConnected(true);
       setError(null);
-    };
+    }
 
-    const handleMessage = (event: MessageEvent) => {
+    socket.onmessage = (event: MessageEvent) => {
       const message = event.data.toString();
       const isSystemMessage =
         message.startsWith('Request') ||
@@ -36,49 +36,45 @@ export default function useWS(key: string, url?: string): UseWSReturn {
       if (!isSystemMessage) {
         setMessages(prev => [...prev, message]);
       }
-    };
+    }
 
-    const handleClose = () => {
-      setIsConnected(false);
-    };
-
-    const handleError = (event: Event) => {
-      console.error(`${key}: error`, event);
+    socket.onerror = () => {
       setIsConnected(false);
       setError(new Error('WebSocket connection error'));
-    };
+    }
 
-    socket.addEventListener('open', handleOpen);
-    socket.addEventListener('message', handleMessage);
-    socket.addEventListener('close', handleClose);
-    socket.addEventListener('error', handleError);
+    socket.onclose = () => {
+      setIsConnected(false);
+    }
 
     if (socket.readyState === WebSocket.OPEN) {
       setIsConnected(true);
     }
 
     return () => {
-      socket.removeEventListener('open', handleOpen);
-      socket.removeEventListener('message', handleMessage);
-      socket.removeEventListener('close', handleClose);
-      socket.removeEventListener('error', handleError);
+      socket.onopen = null;
+      socket.onmessage = null;
+      socket.onerror = null;
+      socket.onclose = null;
     };
   }, [key, url]);
 
-  const send = useCallback((data: string | object) => {
-    return webSocket.send(key, data);
-  }, [key]);
+  const send = (data: string | object): void => {
+    webSocket.send(key, data);
+  }
 
-  const disconnect = useCallback((): void => {
+  const disconnect = (): void => {
     webSocket.disconnect(key);
-  }, [key]);
+  }
+
+  const getAllConnections = () => webSocket.getActiveKeys()
 
   return {
     isConnected,
     error,
     send,
     disconnect,
-    getAllConnections: () => webSocket.getActiveKeys(),
+    getAllConnections,
     messages
   };
 }
