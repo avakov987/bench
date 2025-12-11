@@ -3,8 +3,8 @@ import useWS from '../hooks/useWS';
 import Chat from '../components/Chat';
 
 export default function TestWebSocket() {
-	const inputRef = useRef<HTMLInputElement>(null);
-	const [connectionKey, setConnectionKey] = useState<string>(
+	const inputRef = useRef(null);
+	const [connectionKey, setConnectionKey] = useState(
 		`connection_${Date.now()}`
 	);
 	const { isConnected, send, disconnect, messages } = useWS(
@@ -12,7 +12,7 @@ export default function TestWebSocket() {
 		'wss://echo.websocket.org'
 	);
 
-	const handleSend = (): void => {
+	const handleSend = () => {
 		if (!inputRef.current) return;
 
 		const text = inputRef.current.value.trim();
@@ -20,28 +20,20 @@ export default function TestWebSocket() {
 		if (!text) return;
 
 		send(text);
+
 		inputRef.current.value = '';
 	};
 
-	const handleKeyPress = (event): void => {
+	const handleKeyPress = (event) => {
 		if (event.key === 'Enter') {
 			event.preventDefault();
 			handleSend();
 		}
 	};
 
-	const handleCreateConnection = (): void => {
+	const handleCreateConnection = () => {
 		setConnectionKey(`connection_${Date.now()}`);
 	};
-
-	const getInputValue = (): string => {
-		return inputRef.current?.value.trim() || '';
-	};
-
-	const hasTextToSend = (): boolean => {
-		return getInputValue().length > 0;
-	};
-
 	return (
 		<div>
 			<div>Test WS</div>
@@ -76,12 +68,8 @@ export default function TestWebSocket() {
 
 			<div>
 				<button
+					style={{ backgroundColor: '#4CAF50' }}
 					onClick={handleSend}
-					disabled={!isConnected || !hasTextToSend()}
-					style={{
-						backgroundColor:
-							isConnected && hasTextToSend() ? '#4CAF50' : '#ccc',
-					}}
 				>
 					отправить сообщение
 				</button>
