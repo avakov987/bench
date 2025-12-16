@@ -5,6 +5,7 @@ import DifficultExample from './pages/DifficultExample';
 import DefaultPage from './pages/DefaultPage';
 import './App.css';
 import TestWS from './pages/TestWS';
+import NumberAndScroll from './pages/RefactoringScroll';
 
 function App() {
 	return (
@@ -15,6 +16,10 @@ function App() {
 				<Route path="/middle" element={<MiddleExample />} />
 				<Route path="/difficult" element={<DifficultExample />} />
 				<Route path="/test-ws" element={<TestWS />} />
+				<Route
+					path="/refactoring-scroll"
+					element={<NumberAndScroll />}
+				/>
 			</Routes>
 		</>
 	);
