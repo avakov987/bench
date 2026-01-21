@@ -1,43 +1,34 @@
-// import { useEffect, useRef } from "react";
+// этот способ решает проблему что если какое-то другое состояние обновится, юзПревиос вернет актуальный каррент который равен велью
+// это происходит так как хук раньше возвращал сначала current а затем его же и менял после того как компонент ренедрелился и при этом велью не менялся
+// вариант с useMemo считаю избыточным(замысел чтобы хук выполнялся только при обновлении велью), вариант с 2умя стейтами неоптимизированным
 
-// export function usePrevious<T>(value: T): T | null {
-//   const ref = useRef<T | null>(null);
+// 1) вариант с юзЭффект для стриктМод, но все же оптимизированеimport { useRef, useEffect } from 'react';
 
-//   useEffect(() => {
-//     ref.current = value;
-//   }, [value]);
+export function usePrevious<T>(value: T): T | undefined {
+  const currentRef = useRef<T>(value);
+  const prevRef = useRef<T | undefined>(undefined);
 
-//   return ref.current;
-// }
+  useEffect(() => {
+    if (currentRef.current !== value) {
+      prevRef.current = currentRef.current;
+      currentRef.current = value;
+    }
+  }, [value]);
 
-// // пользуемся тем что до первого рендера рефа пуста, а юзэффект сработает после монтирования
+  return prevRef.current;
+}
 
-// import { useState, useEffect } from 'react';
+// 2)
+import { useRef } from "react";
 
-// export function usePrevious<T>(value: T): T | undefined {
-//   const [previous, setPrevious] = useState<T | undefined>();
-//   const [current, setCurrent] = useState(value);
+export function usePrevious<T>(value: T): T | undefined {
+  const currentRef = useRef<T>(value)
+  const previousRef = useRef<T | undefined>(undefined)
+  if (currentRef.current !== value) {
+    previousRef.current = currentRef.current
+    currentRef.current = value
+  }
 
-//   useEffect(() => {
-//     if (current !== value) {
-//       setPrevious(() => current);
-//       setCurrent(() => value);
-//     }
-//   }, [value, current]);
+  return previousRef.current
+}
 
-//   return previous;
-// }
-
-// import { useRef, useLayoutEffect } from 'react';
-
-// export function usePrevious<T>(value: T): T | null {
-//   const ref = useRef<T | null>(null);
-
-//   useLayoutEffect(() => {
-//     console.log(ref.current, value);
-
-//     ref.current = value;
-//   });
-
-//   return ref.current;
-// }
